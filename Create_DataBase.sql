@@ -1,0 +1,53 @@
+Create DATABASE GESTION_STOCK;
+GO
+USE GESTION_STOCK;
+GO
+CREATE TABLE Proveedores(
+IdProveedor INT PRIMARY KEY IDENTITY(1,1),
+Nombre VARCHAR(100) NOT NULL,
+Apellido NVARCHAR(100) NOT NULL,
+Telefono NVARCHAR(20),
+Email NVARCHAR(100) NOT NULL,
+FechaUltimaEntrega DATE NOT NULL
+);
+
+CREATE TABLE Empleados(
+IdEmpleado INT PRIMARY KEY IDENTITY(1,1),
+Nombre NVARCHAR(100) NOT NULL,
+Apellido NVARCHAR(100) NOT NULL,
+Telefono NVARCHAR(20),
+Email NVARCHAR(100) NOT NULL,
+Rol NVARCHAR(20) NOT NULL,
+Activo BIT NOT NULL
+);
+
+CREATE TABLE Productos(
+IdProducto INT PRIMARY KEY IDENTITY(1,1),
+NombreProducto NVARCHAR(100),
+Categoria NVARCHAR(100),
+Stock INT NOT NULL,
+PrecioUnitario DECIMAL(10,2) NOT NULL,
+IdProveedor INT NOT NULL,
+FOREIGN KEY(IdProveedor) REFERENCES Proveedores(IdProveedor),
+Estado BIT NOT NULL,
+);
+
+CREATE TABLE AlertaStock(
+IdAlerta INT PRIMARY KEY IDENTITY(1,1),
+IdProducto INT NOT NULL,
+FOREIGN KEY(IdProducto) REFERENCES Productos(IdProducto),
+FechaAlerta DATE NOT NULL,
+StockMinimo INT NOT NULL,
+);
+
+CREATE TABLE MomivientoStock(
+ IdMovimiento INT PRIMARY KEY IDENTITY(1,1),
+ IdProducto INT NOT NULL,
+ IdEmpleado INT NOT NULL,
+ Fecha DATE NOT NULL,
+ Tipo NVARCHAR(50) NOT NULL,
+ Descripcion NVARCHAR(255),
+ Cantidad INT NOT NULL,
+ FOREIGN KEY (IdProducto) REFERENCES Productos(IdProducto),
+ FOREIGN KEY (IdEmpleado) REFERENCES Empleados(IdEmpleado)
+)
