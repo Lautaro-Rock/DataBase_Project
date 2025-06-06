@@ -80,6 +80,26 @@ END;
 
 GO
 
+--Procedimiento almacenado para eliminar de manera lógica un producto de la tabla "Productos"
+
+CREATE PROCEDURE sp_BajaLogicaProducto
+    @IdProducto INT
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION
+            UPDATE Productos
+            SET Estado = 0
+            WHERE IdProducto = @IdProducto;
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+
+
 --- Procedimiento almacenado para listar los productos de la tabla "Productos"
 CREATE PROCEDURE sp_ListarProductos
 AS
@@ -172,6 +192,25 @@ END;
 
 GO
 
+--Procedimiento almacenado para eliminar de manera lógica, un empleado de la tabla "Empleados"
+
+CREATE PROCEDURE sp_BajaLogicaEmpleado
+    @IdEmpleado INT
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION
+            UPDATE Empleados
+            SET Activo = 0
+            WHERE IdEmpleado = @IdEmpleado;
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+
 -- Procedimiento almacenado para listar los empleados de la tabla "Empleados"
 CREATE PROCEDURE sp_ListarEmpleados
 AS
@@ -263,6 +302,25 @@ BEGIN
 END;
 
 GO
+
+--Procedimiento almacenado para eliminar de forma lógica, un proveedor de la tabla "Proveedores"
+
+CREATE PROCEDURE sp_BajaLogicaProveedor
+    @IdProveedor INT
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION
+            UPDATE Proveedores
+            SET Activo = 0
+            WHERE IdProveedor = @IdProveedor;
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
 
 -- Procedimiento almacenado para listar los proveedores de la tabla "Proveedores"
 CREATE PROCEDURE sp_ListarProveedores
