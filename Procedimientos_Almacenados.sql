@@ -21,8 +21,8 @@ AS
 BEGIN
     BEGIN TRY
         BEGIN TRANSACTION
-            INSERT INTO Productos(NombreProducto, IdCategoria, Stock, StockMinimo, PrecioUnitario, IdProveedor, Estado)
-            Values(@NombreProducto, @IdCategoria, @Stock, @StockMinimo, @PrecioUnitario, @IdProveedor, @Estado);
+            INSERT INTO Productos (NombreProducto, IdCategoria, Stock, StockMinimo, PrecioUnitario, IdProveedor, Estado)
+            Values (@NombreProducto, @IdCategoria, @Stock, @StockMinimo, @PrecioUnitario, @IdProveedor, @Estado);
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -61,7 +61,6 @@ END;
 GO
 
 -- Procedimiento almacenado para eliminar un producto de la tabla "Productos"
-
 CREATE PROCEDURE sp_EliminarProducto
     @IdProducto INT
 AS
@@ -80,8 +79,7 @@ END;
 
 GO
 
---Procedimiento almacenado para eliminar de manera lógica un producto de la tabla "Productos"
-
+--Procedimiento almacenado para eliminar de manera logica un producto de la tabla "Productos"
 CREATE PROCEDURE sp_BajaLogicaProducto
     @IdProducto INT
 AS
@@ -99,18 +97,18 @@ BEGIN
     END CATCH
 END;
 
+GO
+
 
 --- Procedimiento almacenado para listar los productos de la tabla "Productos"
 CREATE PROCEDURE sp_ListarProductos
 AS
 BEGIN
     BEGIN TRY
-        BEGIN TRANSACTION
-            SELECT * FROM Productos;
-        COMMIT TRANSACTION;
+            SELECT * 
+            FROM Productos;
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
         THROW;
     END CATCH
 END;
@@ -135,8 +133,8 @@ AS
 BEGIN
     BEGIN TRY
         BEGIN TRANSACTION
-            INSERT INTO Empleados(Nombre, Apellido, Telefono, Email, IdTipoRol, Activo)
-            VALUES(@Nombre, @Apellido, @Telefono, @Email, @IdTipoRol, @Activo);
+            INSERT INTO Empleados (Nombre, Apellido, Telefono, Email, IdTipoRol, Activo)
+            VALUES (@Nombre, @Apellido, @Telefono, @Email, @IdTipoRol, @Activo);
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -163,7 +161,7 @@ BEGIN
             UPDATE Empleados
             SET Nombre = @Nombre, Apellido = @Apellido, Telefono = @Telefono, Email = @Email, IdTipoRol = @IdTipoRol, Activo = @Activo
             WHERE IdEmpleado = @IdEmpleado;
-        COMMIT TRANSACTION
+        COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;
@@ -182,7 +180,7 @@ BEGIN
         BEGIN TRANSACTION
             DELETE FROM Empleados
             WHERE IdEmpleado = @IdEmpleado;
-        COMMIT TRANSACTION
+        COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;
@@ -192,8 +190,7 @@ END;
 
 GO
 
---Procedimiento almacenado para eliminar de manera lógica, un empleado de la tabla "Empleados"
-
+--Procedimiento almacenado para eliminar de manera logica, un empleado de la tabla "Empleados"
 CREATE PROCEDURE sp_BajaLogicaEmpleado
     @IdEmpleado INT
 AS
@@ -211,17 +208,17 @@ BEGIN
     END CATCH
 END;
 
+GO
+
 -- Procedimiento almacenado para listar los empleados de la tabla "Empleados"
 CREATE PROCEDURE sp_ListarEmpleados
 AS
 BEGIN
     BEGIN TRY
-        BEGIN TRANSACTION
-            SELECT * FROM Empleados;
-        COMMIT TRANSACTION;
+        SELECT *
+        FROM Empleados;
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
         THROW;
     END CATCH
 END;
@@ -236,18 +233,18 @@ GO
 
 -- Procedimiento almacenado para agregar un proveedor a la tabla "Proveedores"
 CREATE PROCEDURE sp_AgregarProveedor
-    @nombre VARCHAR(100),
-    @apellido VARCHAR(100),
-    @telefono VARCHAR(20),
-    @email VARCHAR(100),
+    @nombre NVARCHAR(100),
+    @apellido NVARCHAR(100),
+    @telefono NVARCHAR(20),
+    @email NVARCHAR(100),
     @fechaUltimaEntrega DATE,
     @activo BIT
 AS
 BEGIN
     BEGIN TRY
         BEGIN TRANSACTION
-            INSERT INTO Proveedores(Nombre, Apellido, Telefono, Email, FechaUltimaEntrega, Activo)
-            VALUES(@nombre, @apellido, @telefono, @email, @fechaUltimaEntrega, @activo);
+            INSERT INTO Proveedores (Nombre, Apellido, Telefono, Email, FechaUltimaEntrega, Activo)
+            VALUES (@nombre, @apellido, @telefono, @email, @fechaUltimaEntrega, @activo);
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -261,10 +258,10 @@ GO
 -- Procedimiento almacenado para editar un proveedor de la tabla "Proveedores"
 CREATE PROCEDURE sp_EditarProveedor
     @IdProveedor INT,
-    @nombre VARCHAR(100),
-    @apellido VARCHAR(100),
-    @telefono VARCHAR(20),
-    @email VARCHAR(100),
+    @nombre NVARCHAR(100),
+    @apellido NVARCHAR(100),
+    @telefono NVARCHAR(20),
+    @email NVARCHAR(100),
     @fechaUltimaEntrega DATE,
     @activo BIT
 AS
@@ -303,8 +300,7 @@ END;
 
 GO
 
---Procedimiento almacenado para eliminar de forma lógica, un proveedor de la tabla "Proveedores"
-
+--Procedimiento almacenado para eliminar de forma logica, un proveedor de la tabla "Proveedores"
 CREATE PROCEDURE sp_BajaLogicaProveedor
     @IdProveedor INT
 AS
@@ -322,13 +318,42 @@ BEGIN
     END CATCH
 END;
 
+GO
+
 -- Procedimiento almacenado para listar los proveedores de la tabla "Proveedores"
 CREATE PROCEDURE sp_ListarProveedores
 AS
 BEGIN
     BEGIN TRY
-        BEGIN TRANSACTION
-            SELECT * FROM Proveedores;
+            SELECT *
+            FROM Proveedores;
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH
+END;
+
+GO
+
+-- ==================================================================================================================================================
+--
+--                                                                     TABLA MOVIMIENTOSTOCK
+--
+-- ==================================================================================================================================================
+
+-- Procedimiento almacenado para registrar un movimientos de la tabla "MovimientoStock"
+CREATE PROCEDURE sp_RegistrarMovimientoStock
+    @IdTipoMovimiento INT,
+    @IdProducto INT,
+    @Cantidad INT,
+    @IdEmpleado INT,
+    @Descripcion NVARCHAR(255)
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+            INSERT INTO MovimientoStock (IdTipoMovimiento, IdProducto, Cantidad, Fecha, IdEmpleado, Descripcion) 
+            VALUES (@IdTipoMovimiento, @IdProducto, @Cantidad, GETDATE(), @IdEmpleado, @Descripcion);
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -339,50 +364,21 @@ END;
 
 GO
 
--- ==================================================================================================================================================
---
---                                                                     TABLA PRODUCTOS
---
--- ==================================================================================================================================================
-
-
--- Procedimiento almacenado para registrar movimientos de la tabla "MovimientoStock"
-
-CREATE PROCEDURE sp_RegistrarMovimientoStock
-    @IdProducto INT,
+-- Procedimiento almacenado para editar un movimiento de la tabla "MovimientoStock"
+CREATE PROCEDURE sp_ModificarMovimientoStock
+    @IdMovimiento INT,
     @IdTipoMovimiento INT,
+    @IdProducto INT,
     @Cantidad INT,
     @IdEmpleado INT,
-    @Descripcion NVARCHAR(255) = NULL
+    @Descripcion NVARCHAR(255)
 AS
 BEGIN
     BEGIN TRY
-        BEGIN TRANSACTION;
-
-        DECLARE @StockActual INT, @StockNuevo INT, @StockMinimo INT;
-
-        SELECT @StockActual = Stock, @StockMinimo = StockMinimo
-        FROM Productos
-        WHERE IdProducto = @IdProducto;
-
-        IF @IdTipoMovimiento = 1
-            SET @StockNuevo = @StockActual + @Cantidad;
-        ELSE IF @IdTipoMovimiento = 2
-            SET @StockNuevo = @StockActual - @Cantidad;
-        ELSE
-            THROW 50001, 'Tipo de movimiento inválido.', 1;
-
-        INSERT INTO MovimientoStock (IdProducto, IdEmpleado, Fecha, IdTipoMovimiento, Descripcion, Cantidad)
-        VALUES (@IdProducto, @IdEmpleado, GETDATE(), @IdTipoMovimiento, @Descripcion, @Cantidad);
-
-        UPDATE Productos SET Stock = @StockNuevo WHERE IdProducto = @IdProducto;
-
-        IF @StockNuevo < @StockMinimo
-        BEGIN
-            INSERT INTO AlertaStock (IdProducto, FechaAlerta, Descripcion)
-            VALUES (@IdProducto, GETDATE(), 'El stock actual está por debajo del mínimo.');
-        END
-
+        BEGIN TRANSACTION
+            UPDATE MovimientoStock
+            SET IdTipoMovimiento = @IdTipoMovimiento, IdProducto = @IdProducto, Cantidad = @Cantidad, IdEmpleado = @IdEmpleado, Descripcion = @Descripcion
+            WHERE IdMovimiento = @IdMovimiento;
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -391,97 +387,158 @@ BEGIN
     END CATCH
 END;
 
--- Procedimiento almacenado para listar los movimientos del stock de la tabla "ListarMovimientosStock"
+GO
 
-CREATE PROCEDURE sp_ListarMovimientosStock
+-- Procedimiento Almacenado para eliminar un movimiento de la tabla "MovimientoStock"
+CREATE PROCEDURE sp_EliminarMovimientoStock
+    @IdMovimiento INT
 AS
 BEGIN
-    SELECT MS.IdMovimiento, MS.Fecha, MS.Cantidad, MS.Descripcion,
-           P.NombreProducto, E.Nombre + ' ' + E.Apellido AS Empleado,
-           TM.Descripcion AS TipoMovimiento
-    FROM MovimientoStock MS
-    INNER JOIN Productos P ON MS.IdProducto = P.IdProducto
-    INNER JOIN Empleados E ON MS.IdEmpleado = E.IdEmpleado
-    INNER JOIN TipoMovimiento TM ON MS.IdTipoMovimiento = TM.IdTipoMovimiento
-    ORDER BY MS.Fecha DESC;
+    BEGIN TRY
+        BEGIN TRANSACTION
+            DELETE FROM MovimientoStock
+            WHERE IdMovimiento = @IdMovimiento;
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
 END;
+
+GO
+
+-- Procedimiento almacenado para listar los movimientos de la tabla "MovimientoStock"
+CREATE PROCEDURE sp_ListarMovimientoStock
+AS
+BEGIN
+    BEGIN TRY
+        SELECT *
+        FROM MovimientoStock;
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH
+END;
+
+GO
 
 -- ==================================================================================================================================================
 --
---                                                                     TABLA PRODUCTOS
+--                                                                     TABLA ALERTASTOCK
 --
 -- ==================================================================================================================================================
 
-
--- AlertaStock
-
--- Procedimiento almacenado para listar las alertas de stock 
---
-CREATE PROCEDURE sp_ListarAlertasStock
-AS
-BEGIN
-    SELECT A.IdAlerta, A.FechaAlerta, A.Descripcion,
-           P.NombreProducto, P.Stock, P.StockMinimo
-    FROM AlertaStock A
-    INNER JOIN Productos P ON A.IdProducto = P.IdProducto
-    ORDER BY A.FechaAlerta DESC;
-END;
-
--- Procedimiento almacenado para eliminar las alertas de stock
-
+-- Procedimiento almacenado para eliminar una alerta de la tabla "AlertaStock"
 CREATE PROCEDURE sp_EliminarAlertaStock
     @IdAlerta INT
 AS
 BEGIN
-    DELETE FROM AlertaStock WHERE IdAlerta = @IdAlerta;
+    BEGIN TRY
+        BEGIN TRANSACTION
+            DELETE FROM AlertaStock
+            WHERE IdAlerta = @IdAlerta;
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
 END;
 
+GO
+
+-- Procedimiento almacenado para listar las alertas de la tabla "AlertaStock"
+CREATE PROCEDURE sp_ListarAlertasStock
+AS
+BEGIN
+    BEGIN TRY
+        SELECT *
+        FROM AlertaStock;
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH
+END;
+
+GO
+
 -- ==================================================================================================================================================
 --
---                                                                     TABLA PRODUCTOS
+--                                                                     TABLA CATEGORIAS
 --
 -- ==================================================================================================================================================
 
-
--- Categoria
--- Procedimiento almacenado para agregar una categoria 
-
+-- Procedimiento almacenado para registrar una categoria a la tabla "Categorias"
 CREATE PROCEDURE sp_AgregarCategoria
     @NombreCategoria NVARCHAR(100)
 AS
 BEGIN
-    INSERT INTO Categoria (NombreCategoria)
-    VALUES (@NombreCategoria);
+    BEGIN TRY
+        BEGIN TRANSACTION
+            INSERT INTO Categoria (NombreCategoria)
+            VALUES (@NombreCategoria);
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
 END;
 
--- Procedimiento almacenado para modificar una categoria
+GO
 
+-- Procedimiento almacenado para editar una categoria de la tabla "Categorias"
 CREATE PROCEDURE sp_ModificarCategoria
     @IdCategoria INT,
-    @NuevoNombre NVARCHAR(100)
+    @nombre NVARCHAR(100)
 AS
 BEGIN
-    UPDATE Categoria
-    SET NombreCategoria = @NuevoNombre
-    WHERE IdCategoria = @IdCategoria;
+    BEGIN TRY
+        BEGIN TRANSACTION
+            UPDATE Categoria
+            SET NombreCategoria = @nombre
+            WHERE IdCategoria = @IdCategoria;
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
 END;
 
--- Procedimiento almacenado para eliminar una categoria
+GO
 
+-- Procedimiento almacenado para eliminar una categoria de la tabla "Categorias"
 CREATE PROCEDURE sp_EliminarCategoria
     @IdCategoria INT
 AS
 BEGIN
-    DELETE FROM Categoria
-    WHERE IdCategoria = @IdCategoria;
+    BEGIN TRY
+        BEGIN TRANSACTION
+            DELETE FROM Categoria
+            WHERE IdCategoria = @IdCategoria;
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
 END;
 
--- Procedimiento almacenado para listar categorias
+GO
 
+-- Procedimiento almacenado para listar categorias
 CREATE PROCEDURE sp_ListarCategorias
 AS
 BEGIN
-    SELECT IdCategoria, NombreCategoria
-    FROM Categoria
-    ORDER BY NombreCategoria;
+    BEGIN TRY
+        SELECT *
+        FROM Categoria;
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH
 END;
+
+GO
