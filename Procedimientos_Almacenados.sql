@@ -280,3 +280,71 @@ BEGIN
 END;
 
 GO
+
+-- ==================================================================================================================================================
+--
+--                                                                     TABLA PRODUCTOS
+--
+-- ==================================================================================================================================================
+
+
+-- Procedimiento almacenado para registrar movimientos de la tabla "MovimientoStock"
+
+CREATE PROCEDURE sp_RegistrarMovimientoStock
+    @IdProducto INT,
+    @IdTipoMovimiento INT,
+    @Cantidad INT,
+    @IdEmpleado INT,
+    @Descripcion NVARCHAR(255) = NULL
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        DECLARE @StockActual INT, @StockNuevo INT, @StockMinimo INT;
+
+        SELECT @StockActual = Stock, @StockMinimo = StockMinimo
+        FROM Productos
+        WHERE IdProducto = @IdProducto;
+
+        IF @IdTipoMovimiento = 1
+            SET @StockNuevo = @StockActual + @Cantidad;
+        ELSE IF @IdTipoMovimiento = 2
+            SET @StockNuevo = @StockActual - @Cantidad;
+        ELSE
+            THROW 50001, 'Tipo de movimiento inválido.', 1;
+
+        INSERT INTO MovimientoStock (IdProducto, IdEmpleado, Fecha, IdTipoMovimiento, Descripcion, Cantidad)
+        VALUES (@IdProducto, @IdEmpleado, GETDATE(), @IdTipoMovimiento, @Descripcion, @Cantidad);
+
+        UPDATE Productos SET Stock = @StockNuevo WHERE IdProducto = @IdProducto;
+
+        IF @StockNuevo < @StockMinimo
+        BEGIN
+            INSERT INTO AlertaStock (IdProducto, FechaAlerta, Descripcion)
+            VALUES (@IdProducto, GETDATE(), 'El stock actual está por debajo del mínimo.');
+        END
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+
+-- Procedimiento almacenado para listar los movimientos del stock de la tabla "ListarMovimientosStock"
+
+CREATE PROCEDURE sp_ListarMovimientosStock
+AS
+BEGIN
+    SELECT MS.IdMovimiento, MS.Fecha, MS.Cantidad, MS.Descripcion,
+           P.NombreProducto, E.Nombre + ' ' + E.Apellido AS Empleado,
+           TM.Descripcion AS TipoMovimiento
+    FROM MovimientoStock MS
+    INNER JOIN Productos P ON MS.IdProducto = P.IdProducto
+    INNER JOIN Empleados E ON MS.IdEmpleado = E.IdEmpleado
+    INNER JOIN TipoMovimiento TM ON MS.IdTipoMovimiento = TM.IdTipoMovimiento
+    ORDER BY MS.Fecha DESC;
+END;
+

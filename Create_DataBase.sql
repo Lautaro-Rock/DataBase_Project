@@ -68,6 +68,31 @@ CREATE TABLE TipoMovimiento (
     Descripcion NVARCHAR(50) NOT NULL
 );
 
+-- SUGERENCIA DE DISEÑO:
+-- La tabla TipoMovimiento la pensé para contener únicamente dos tipos de movimiento:
+--     1 = 'Entrada'
+--     2 = 'Salida'
+-- Ya que los movimientos que pueden existir es el ingreso o salida de los productos a stock
+-- Entonces estos valores deberían ser fijos y no deben modificarse ni agregarse más.
+-- Ya que 
+-- La columna IdTipoMovimiento actualmente es IDENTITY (se autoincrementa),
+-- pero como los valores deben ser fijos (1 y 2), es recomendable quitar el IDENTITY
+-- y cargar manualmente los valores, así:
+
+-- CREATE TABLE TipoMovimiento (
+--     IdTipoMovimiento INT PRIMARY KEY, -- sin IDENTITY
+--     Descripcion NVARCHAR(50) NOT NULL
+-- );
+
+-- INSERT INTO TipoMovimiento (IdTipoMovimiento, Descripcion) VALUES (1, 'Entrada');
+-- INSERT INTO TipoMovimiento (IdTipoMovimiento, Descripcion) VALUES (2, 'Salida');
+
+-- Esto garantiza que los procedimientos almacenados que usan estos IDs funcionen correctamente
+-- y evita la aparición de IDs innecesarios como 3, 4, etc.
+
+
+
+
 -- Tabla movimientos
 CREATE TABLE MovimientoStock (
     IdMovimiento INT PRIMARY KEY IDENTITY(1,1),
@@ -81,3 +106,5 @@ CREATE TABLE MovimientoStock (
     FOREIGN KEY (IdEmpleado) REFERENCES Empleados(IdEmpleado),
     FOREIGN KEY (IdTipoMovimiento) REFERENCES TipoMovimiento(IdTipoMovimiento)
 );
+
+select*from TipoMovimiento;
