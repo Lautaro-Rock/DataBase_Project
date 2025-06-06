@@ -348,3 +348,32 @@ BEGIN
     ORDER BY MS.Fecha DESC;
 END;
 
+-- ==================================================================================================================================================
+--
+--                                                                     TABLA PRODUCTOS
+--
+-- ==================================================================================================================================================
+
+
+-- AlertaStock
+
+-- Procedimiento almacenado para listar las alertas de stock 
+--
+CREATE PROCEDURE sp_ListarAlertasStock
+AS
+BEGIN
+    SELECT A.IdAlerta, A.FechaAlerta, A.Descripcion,
+           P.NombreProducto, P.Stock, P.StockMinimo
+    FROM AlertaStock A
+    INNER JOIN Productos P ON A.IdProducto = P.IdProducto
+    ORDER BY A.FechaAlerta DESC;
+END;
+
+-- Procedimiento almacenado para eliminar las alertas de stock
+
+CREATE PROCEDURE sp_EliminarAlertaStock
+    @IdAlerta INT
+AS
+BEGIN
+    DELETE FROM AlertaStock WHERE IdAlerta = @IdAlerta;
+END;
