@@ -377,3 +377,53 @@ AS
 BEGIN
     DELETE FROM AlertaStock WHERE IdAlerta = @IdAlerta;
 END;
+
+-- ==================================================================================================================================================
+--
+--                                                                     TABLA PRODUCTOS
+--
+-- ==================================================================================================================================================
+
+
+-- Categoria
+-- Procedimiento almacenado para agregar una categoria 
+
+CREATE PROCEDURE sp_AgregarCategoria
+    @NombreCategoria NVARCHAR(100)
+AS
+BEGIN
+    INSERT INTO Categoria (NombreCategoria)
+    VALUES (@NombreCategoria);
+END;
+
+-- Procedimiento almacenado para modificar una categoria
+
+CREATE PROCEDURE sp_ModificarCategoria
+    @IdCategoria INT,
+    @NuevoNombre NVARCHAR(100)
+AS
+BEGIN
+    UPDATE Categoria
+    SET NombreCategoria = @NuevoNombre
+    WHERE IdCategoria = @IdCategoria;
+END;
+
+-- Procedimiento almacenado para eliminar una categoria
+
+CREATE PROCEDURE sp_EliminarCategoria
+    @IdCategoria INT
+AS
+BEGIN
+    DELETE FROM Categoria
+    WHERE IdCategoria = @IdCategoria;
+END;
+
+-- Procedimiento almacenado para listar categorias
+
+CREATE PROCEDURE sp_ListarCategorias
+AS
+BEGIN
+    SELECT IdCategoria, NombreCategoria
+    FROM Categoria
+    ORDER BY NombreCategoria;
+END;
