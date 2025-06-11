@@ -12,7 +12,6 @@ GO
 CREATE PROCEDURE sp_Agregar_Producto
     @NombreProducto NVARCHAR(100),
     @IdCategoria INT,
-    @Stock INT,
     @StockMinimo INT,
     @PrecioUnitario Decimal(10,2),
     @IdProveedor INT
@@ -46,19 +45,9 @@ BEGIN
                 RAISERROR('LA CATEGORIA INGRESADA NO EXISTE EN EL SISTEMA', 16, 1);
             END
 
-            -- VERIFICAR EL STOCK
-            IF @Stock < 1 BEGIN
-                RAISERROR('EL STOCK INGRESADO NO ES VALIDO', 16, 1);
-            END
-
             -- VERIFICAR EL STOCK MINIMO
             IF @StockMinimo < 1 BEGIN
                 RAISERROR('EL STOCK MINIMO INGRESADO NO ES VALIDO', 16, 1);
-            END
-
-            -- VERIFICAR QUE EL STOCK SEA MAYOR AL STOCK MINIMO
-            IF @stock < @stockMinimo BEGIN
-                RAISERROR('EL STOCK NO PUEDE SER MENOR AL STOCK MINIMO', 16, 1);
             END
 
             -- VERIFICAR EL PRECIO UNITARIO
@@ -81,7 +70,7 @@ BEGIN
 
             -- SI LOS DATOS INGRESADOS SON CORRECTOS, SE REALIZA EL INSERT
             INSERT INTO Productos(NombreProducto, IdCategoria, Stock, StockMinimo, PrecioUnitario, IdProveedor, Estado)
-            VALUES(@NombreProducto, @IdCategoria, @Stock, @StockMinimo, @PrecioUnitario, @IdProveedor, 1);
+            VALUES(@NombreProducto, @IdCategoria, 0, @StockMinimo, @PrecioUnitario, @IdProveedor, 1);
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -119,25 +108,6 @@ END;
 
 GO
 
--- Procedimiento almacenado para eliminar un producto de la tabla "Productos"
-CREATE PROCEDURE sp_Eliminar_Producto
-    @IdProducto INT
-AS
-BEGIN
-    BEGIN TRY
-        BEGIN TRANSACTION
-            DELETE FROM Productos
-            WHERE IdProducto = @IdProducto;
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
-END;
-
-GO
-
 --Procedimiento almacenado para eliminar de manera logica un producto de la tabla "Productos"
 CREATE PROCEDURE sp_BajaLogica_Producto
     @IdProducto INT
@@ -152,22 +122,6 @@ BEGIN
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
-END;
-
-GO
-
-
---- Procedimiento almacenado para listar los productos de la tabla "Productos"
-CREATE PROCEDURE sp_Listar_Productos
-AS
-BEGIN
-    BEGIN TRY
-            SELECT * 
-            FROM Productos;
-    END TRY
-    BEGIN CATCH
         THROW;
     END CATCH
 END;
@@ -272,25 +226,6 @@ END;
 
 GO
 
--- Procedimiento almacenado para eliminar un empleado de la tabla "Empleados"
-CREATE PROCEDURE sp_Eliminar_Empleado
-    @IdEmpleado INT
-AS
-BEGIN
-    BEGIN TRY
-        BEGIN TRANSACTION
-            DELETE FROM Empleados
-            WHERE IdEmpleado = @IdEmpleado;
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
-END;
-
-GO
-
 --Procedimiento almacenado para eliminar de manera logica, un empleado de la tabla "Empleados"
 CREATE PROCEDURE sp_BajaLogica_Empleado
     @IdEmpleado INT
@@ -305,21 +240,6 @@ BEGIN
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
-END;
-
-GO
-
--- Procedimiento almacenado para listar los empleados de la tabla "Empleados"
-CREATE PROCEDURE sp_Listar_Empleados
-AS
-BEGIN
-    BEGIN TRY
-        SELECT *
-        FROM Empleados;
-    END TRY
-    BEGIN CATCH
         THROW;
     END CATCH
 END;
@@ -413,26 +333,7 @@ END;
 
 GO
 
--- Procedimiento almacenado para eliminar un proveedor de la tabla "Proveedores"
-CREATE PROCEDURE sp_Eliminar_Proveedor
-    @IdProveedor INT
-AS
-BEGIN
-    BEGIN TRY
-        BEGIN TRANSACTION
-            DELETE FROM Proveedores
-            WHERE IdProveedor = @IdProveedor;
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
-END;
-
-GO
-
---Procedimiento almacenado para eliminar de forma logica, un proveedor de la tabla "Proveedores"
+-- Procedimiento almacenado para eliminar de forma logica, un proveedor de la tabla "Proveedores"
 CREATE PROCEDURE sp_BajaLogica_Proveedor
     @IdProveedor INT
 AS
@@ -446,21 +347,6 @@ BEGIN
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
-END;
-
-GO
-
--- Procedimiento almacenado para listar los proveedores de la tabla "Proveedores"
-CREATE PROCEDURE sp_Listar_Proveedores
-AS
-BEGIN
-    BEGIN TRY
-            SELECT *
-            FROM Proveedores;
-    END TRY
-    BEGIN CATCH
         THROW;
     END CATCH
 END;
@@ -523,7 +409,7 @@ BEGIN
                 RAISERROR('EL TIPO DE MOVIMIENTO INGRESADO NO EXISTE EN EL SISTEMA', 16, 1);
             END
 
-            -- VERIFICAR QUE LA CANTIDAD NO SEA MENOR A CERO Y MAYOR O IGUAL AL STOCK
+            -- VERIFICAR QUE SE PUEDA REALIZAR LA OPERACION DE SALIDA / LA ENTRADA SIEMPRE ES VALIDA
             DECLARE @stock INT
 
             SELECT
@@ -532,7 +418,7 @@ BEGIN
             WHERE @IdProducto = IdProducto
 
             IF @Cantidad < 1 BEGIN
-                RAISERROR('LA CANTIDAD NO PUEDE SER MENOR A 1', 16, 1);
+                RAISERROR('LA CANTIDAD NO PUEDE SER MENOR A 1 O NULA', 16, 1);
             END
 
             IF @Cantidad > @stock BEGIN
@@ -593,61 +479,6 @@ BEGIN
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
-END;
-
-GO
-
--- Procedimiento almacenado para listar los movimientos de la tabla "MovimientoStock"
-CREATE PROCEDURE sp_Listar_MovimientoStock
-AS
-BEGIN
-    BEGIN TRY
-        SELECT *
-        FROM MovimientoStock;
-    END TRY
-    BEGIN CATCH
-        THROW;
-    END CATCH
-END;
-
-GO
-
--- ==================================================================================================================================================
---
---                                                                     TABLA ALERTASTOCK
---
--- ==================================================================================================================================================
-
--- Procedimiento almacenado para eliminar una alerta de la tabla "AlertaStock"
-CREATE PROCEDURE sp_Eliminar_AlertaStock
-    @IdAlerta INT
-AS
-BEGIN
-    BEGIN TRY
-        BEGIN TRANSACTION
-            DELETE FROM AlertaStock
-            WHERE IdAlerta = @IdAlerta;
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
-END;
-
-GO
-
--- Procedimiento almacenado para listar las alertas de la tabla "AlertaStock"
-CREATE PROCEDURE sp_Listar_AlertasStock
-AS
-BEGIN
-    BEGIN TRY
-        SELECT *
-        FROM AlertaStock;
-    END TRY
-    BEGIN CATCH
         THROW;
     END CATCH
 END;
@@ -729,21 +560,6 @@ BEGIN
         ROLLBACK TRANSACTION;
         THROW;
     END CATCH;
-END;
-
-GO
-
--- Procedimiento almacenado para listar categorias
-CREATE PROCEDURE sp_Listar_Categorias
-AS
-BEGIN
-    BEGIN TRY
-        SELECT *
-        FROM Categoria;
-    END TRY
-    BEGIN CATCH
-        THROW;
-    END CATCH
 END;
 
 GO
