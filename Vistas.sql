@@ -58,3 +58,35 @@ JOIN Categoria C ON P.IdCategoria = C.IdCategoria
 JOIN Proveedores PR ON P.IdProveedor = PR.IdProveedor
 WHERE P.Stock <= P.StockMinimo AND P.Estado = 1;
 GO
+
+-- Vista a alertas generadas
+-- Muestra todas las alertas de stock generadas, incluyendo el producto, la categoría, el proveedor y la fecha de alerta.
+-- Permite realizar un seguimiento del historial de alertas de stock.
+
+CREATE VIEW vw_AlertasGeneradas AS
+SELECT 
+    A.IdAlerta,
+    A.FechaAlerta,
+    P.NombreProducto,
+    C.NombreCategoria,
+    PR.Nombre + ' ' + PR.Apellido AS Proveedor,
+    A.Descripcion
+FROM AlertaStock A
+JOIN Productos P ON A.IdProducto = P.IdProducto
+JOIN Categoria C ON P.IdCategoria = C.IdCategoria
+JOIN Proveedores PR ON P.IdProveedor = PR.IdProveedor;
+GO
+
+-- Vista a empleados con movimientos
+-- Muestra los empleados que realizaron movimientos de stock, indicando el total de movimientos que cada uno registró. 
+--Permite conocer la participación de cada empleado en los movimientos de stock.
+
+CREATE VIEW vw_EmpleadosConMovimientos AS
+SELECT 
+    E.IdEmpleado,
+    E.Nombre + ' ' + E.Apellido AS Empleado,
+    COUNT(M.IdMovimiento) AS TotalMovimientos
+FROM Empleados E
+JOIN MovimientoStock M ON E.IdEmpleado = M.IdEmpleado
+GROUP BY E.IdEmpleado, E.Nombre, E.Apellido;
+GO
