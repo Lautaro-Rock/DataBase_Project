@@ -90,3 +90,30 @@ FROM Empleados E
 JOIN MovimientoStock M ON E.IdEmpleado = M.IdEmpleado
 GROUP BY E.IdEmpleado, E.Nombre, E.Apellido;
 GO
+
+--Vista a empleados activos
+--Muestra informacion resumida de los empleados que se encuentran activos
+CREATE VIEW vw_EmpleadosActivos AS
+SELECT
+E.Nombre,
+E.Apellido,
+E.Email,
+E.Telefono,
+E.IdTipoRol,
+E.Activo
+FROM Empleados AS E
+WHERE Activo=1;
+GO
+
+--Vistas de proveedores activos
+--Muestra informacion resumiad de los provedores que se encuentran activos
+CREATE VIEW vw_ProveedoresActivos AS
+SELECT
+P.Nombre,
+P.Apellido,
+P.Email,
+P.Telefono,
+p.Activo
+FROM Proveedores AS P
+WHERE Activo=1;
+GO
