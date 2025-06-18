@@ -117,3 +117,48 @@ p.Activo
 FROM Proveedores AS P
 WHERE Activo=1;
 GO
+
+--Vista a productos activos
+--Esta vista muestra todos los productos que se encuentran actualmente activos. Incluye información 
+--relacionada con la categoría y el proveedor correspondiente, permitiendo obtener una visión completa de los 
+--productos disponibles para operaciones dentro del sistema. El filtro se realiza sobre el campo Estado = 1.
+
+CREATE VIEW vw_ProductosActivos
+AS
+SELECT 
+    P.IdProducto,
+    P.NombreProducto,
+    P.Stock,
+    P.StockMinimo,
+    P.PrecioUnitario,
+    P.Estado,
+    C.NombreCategoria,
+    PR.Nombre AS NombreProveedor,
+    PR.Apellido AS ApellidoProveedor
+FROM Productos P
+INNER JOIN Categoria C ON P.IdCategoria = C.IdCategoria
+INNER JOIN Proveedores PR ON P.IdProveedor = PR.IdProveedor
+WHERE P.Estado = 1;
+GO
+
+--Vista a productos inactivos
+--Esta vista muestra todos los productos que han sido marcados como inactivos en el sistema. Es útil para 
+--llevar un control de productos dados de baja de manera lógica. El filtro se realiza sobre el campo Estado = 0.
+
+CREATE VIEW vw_ProductosInactivos
+AS
+SELECT 
+    P.IdProducto,
+    P.NombreProducto,
+    P.Stock,
+    P.StockMinimo,
+    P.PrecioUnitario,
+    P.Estado,
+    C.NombreCategoria,
+    PR.Nombre AS NombreProveedor,
+    PR.Apellido AS ApellidoProveedor
+FROM Productos P
+INNER JOIN Categoria C ON P.IdCategoria = C.IdCategoria
+INNER JOIN Proveedores PR ON P.IdProveedor = PR.IdProveedor
+WHERE P.Estado = 0;
+GO
