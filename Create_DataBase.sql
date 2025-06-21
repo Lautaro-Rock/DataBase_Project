@@ -1,14 +1,18 @@
 CREATE DATABASE GESTION_STOCK;
+
 GO
 
 USE GESTION_STOCK;
+
 GO
 
 -- Tabla de tipos de rol
 CREATE TABLE TipoRol (
-    IdTipoRol INT PRIMARY KEY IDENTITY(1,1),
+    IdTipoRol TINYINT PRIMARY KEY IDENTITY(1,1),
     Descripcion NVARCHAR(50) NOT NULL
 );
+
+GO
 
 -- Tabla de empleados
 CREATE TABLE Empleados (
@@ -17,10 +21,12 @@ CREATE TABLE Empleados (
     Apellido NVARCHAR(100) NOT NULL,
     Telefono NVARCHAR(20),
     Email NVARCHAR(100) NOT NULL,
-    IdTipoRol INT NOT NULL,
+    IdTipoRol TINYINT NOT NULL,
     Activo BIT NOT NULL,
     FOREIGN KEY (IdTipoRol) REFERENCES TipoRol(IdTipoRol)
 );
+
+GO
 
 -- Tabla de proveedores
 CREATE TABLE Proveedores (
@@ -33,17 +39,21 @@ CREATE TABLE Proveedores (
     Activo BIT NOT NULL
 );
 
+GO
+
 -- Tabla de categor�as
 CREATE TABLE Categoria (
-    IdCategoria INT PRIMARY KEY IDENTITY(1,1),
+    IdCategoria TINYINT PRIMARY KEY IDENTITY(1,1),
     NombreCategoria NVARCHAR(100) NOT NULL
 );
+
+GO
 
 -- Tabla de productos
 CREATE TABLE Productos (
     IdProducto INT PRIMARY KEY IDENTITY(1,1),
     NombreProducto NVARCHAR(100),
-    IdCategoria INT NOT NULL,
+    IdCategoria TINYINT NOT NULL,
     Stock INT NOT NULL,
     StockMinimo INT NOT NULL, -- se movi� ac�
     PrecioUnitario DECIMAL(10,2) NOT NULL,
@@ -52,6 +62,8 @@ CREATE TABLE Productos (
     FOREIGN KEY (IdCategoria) REFERENCES Categoria(IdCategoria),
     FOREIGN KEY (IdProveedor) REFERENCES Proveedores(IdProveedor)
 );
+
+GO
 
 -- Tabla de alertas
 CREATE TABLE AlertaStock (
@@ -62,11 +74,15 @@ CREATE TABLE AlertaStock (
     FOREIGN KEY (IdProducto) REFERENCES Productos(IdProducto)
 );
 
+GO
+
 -- Tabla tipo de movimiento
 CREATE TABLE TipoMovimiento (
-    IdTipoMovimiento INT PRIMARY KEY IDENTITY(1,1),
+    IdTipoMovimiento TINYINT PRIMARY KEY IDENTITY(1,1),
     Descripcion NVARCHAR(50) NOT NULL
 );
+
+GO
 
 -- Tabla movimientos
 CREATE TABLE MovimientoStock (
@@ -74,10 +90,31 @@ CREATE TABLE MovimientoStock (
     IdProducto INT NOT NULL,
     IdEmpleado INT NOT NULL,
     Fecha DATE NOT NULL,
-    IdTipoMovimiento INT NOT NULL,
+    IdTipoMovimiento TINYINT NOT NULL,
     Descripcion NVARCHAR(255),
     Cantidad INT NOT NULL,
     FOREIGN KEY (IdProducto) REFERENCES Productos(IdProducto),
     FOREIGN KEY (IdEmpleado) REFERENCES Empleados(IdEmpleado),
     FOREIGN KEY (IdTipoMovimiento) REFERENCES TipoMovimiento(IdTipoMovimiento)
 );
+
+GO
+
+-- EJECUTAR PARA AGREGAR LOS ROLES Y LOS TIPOS DE MOVIMIENTOS
+INSERT INTO TipoRol(Descripcion)
+VALUES('Empleado');
+
+GO
+
+INSERT INTO TipoRol(Descripcion)
+VALUES('Administrador');
+
+GO
+
+INSERT INTO TipoMovimiento(Descripcion)
+VALUES('Entrada');
+
+GO
+
+INSERT INTO TipoMovimiento(Descripcion)
+VALUES('Salida');

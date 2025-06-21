@@ -7,7 +7,7 @@ ON MovimientoStock
 AFTER INSERT
 AS
 BEGIN
-    DECLARE @idTipoMovimiento INT
+    DECLARE @idTipoMovimiento TINYINT
     DECLARE @idProducto INT
     DECLARE @cantidad INT
 

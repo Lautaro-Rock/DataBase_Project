@@ -11,7 +11,7 @@ GO
 -- Procedimiento almacenado para agregar un producto a la tabla "Productos"
 CREATE PROCEDURE sp_Agregar_Producto
     @NombreProducto NVARCHAR(100),
-    @IdCategoria INT,
+    @IdCategoria TINYINT,
     @StockMinimo INT,
     @PrecioUnitario Decimal(10,2),
     @IdProveedor INT,
@@ -34,7 +34,7 @@ BEGIN
             END
 
             -- VERIFICAR QUE LA CATEGORIA EXISTA
-            DECLARE @auxIdCategoria INT
+            DECLARE @auxIdCategoria TINYINT
             SET @auxIdCategoria = NULL;
 
             SELECT
@@ -71,8 +71,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleado INT
-            DECLARE @auxRolEmpleado INT
-            DECLARE @auxActivo INT
+            DECLARE @auxRolEmpleado TINYINT
+            DECLARE @auxActivo BIT
             SET @auxIdEmpleado = NULL;
 
             SELECT
@@ -133,8 +133,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleado INT
-            DECLARE @auxRolEmpleado INT
-            DECLARE @auxActivo INT
+            DECLARE @auxRolEmpleado TINYINT
+            DECLARE @auxActivo BIT
             SET @auxIdEmpleado = NULL;
 
             SELECT
@@ -195,7 +195,7 @@ BEGIN
             END
 
             -- VERIFICAR QUE EL ESTADO SEA (1)
-            DECLARE @auxEstado INT
+            DECLARE @auxEstado BIT
 
             SELECT
                 @auxEstado = Estado
@@ -208,8 +208,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleado INT
-            DECLARE @auxRolEmpleado INT
-            DECLARE @auxActivo INT
+            DECLARE @auxRolEmpleado TINYINT
+            DECLARE @auxActivo BIT
             SET @auxIdEmpleado = NULL;
 
             SELECT
@@ -267,7 +267,7 @@ BEGIN
             END
 
             -- VERIFICAR QUE EL ESTADO SEA (0)
-            DECLARE @auxEstado INT
+            DECLARE @auxEstado BIT
 
             SELECT
                 @auxEstado = Estado
@@ -280,8 +280,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleado INT
-            DECLARE @auxRolEmpleado INT
-            DECLARE @auxActivo INT
+            DECLARE @auxRolEmpleado TINYINT
+            DECLARE @auxActivo BIT
             SET @auxIdEmpleado = NULL;
 
             SELECT
@@ -329,7 +329,7 @@ CREATE PROCEDURE sp_Agregar_Empleado
     @Apellido NVARCHAR(100),
     @Telefono NVARCHAR(20),
     @Email NVARCHAR(100),
-    @IdTipoRol INT,
+    @IdTipoRol TINYINT,
     @IdEmpleado INT
 AS
 BEGIN
@@ -365,7 +365,7 @@ BEGIN
             END
 
             -- VERIFICAR QUE EL TIPO DE ROL EXISTA
-            DECLARE @auxIdRol INT
+            DECLARE @auxIdRol TINYINT
             SET @auxIdRol = NULL
 
             SELECT
@@ -379,8 +379,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleado INT
-            DECLARE @auxRolEmpleado INT
-            DECLARE @auxActivo INT
+            DECLARE @auxRolEmpleado TINYINT
+            DECLARE @auxActivo BIT
             SET @auxIdEmpleado = NULL;
 
             SELECT
@@ -418,7 +418,7 @@ GO
 -- Procedimiento almanceado para editar un empleado de la tabla "Empleados"
 Create Procedure sp_Editar_Empleado
     @IdEmpleado INT,
-    @IdTipoRol INT,
+    @IdTipoRol TINYINT,
     @IdEmpleadoEncargado INT
 AS
 BEGIN
@@ -438,7 +438,7 @@ BEGIN
             END
 
             -- VERIFICAR QUE EL TIPO DE ROL EXISTA
-            DECLARE @auxIdRol INT
+            DECLARE @auxIdRol TINYINT
             SET @auxIdRol = NULL
 
             SELECT
@@ -452,8 +452,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO ENCARGADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleadoEncargado INT
-            DECLARE @auxRolEmpleadoEncargado INT
-            DECLARE @auxActivo INT
+            DECLARE @auxRolEmpleadoEncargado TINYINT
+            DECLARE @auxActivo BIT
             SET @auxIdEmpleadoEncargado = NULL;
 
             SELECT
@@ -499,7 +499,7 @@ BEGIN
         BEGIN TRANSACTION
             -- VERIFICAR QUE EL EMPLEADO A DAR DE BAJA EXISTA Y NO ESTE INACTIVO
             DECLARE @auxEmpleado INT
-            DECLARE @auxActivo INT
+            DECLARE @auxActivo BIT
             SET @auxEmpleado = NULL
 
             SELECT
@@ -518,8 +518,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO ENCARGADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleadoEncargado INT
-            DECLARE @auxRolEmpleadoEncargado INT
-            DECLARE @auxActivoEncargado INT
+            DECLARE @auxRolEmpleadoEncargado TINYINT
+            DECLARE @auxActivoEncargado BIT
             SET @auxIdEmpleadoEncargado = NULL;
 
             SELECT
@@ -565,7 +565,7 @@ BEGIN
         BEGIN TRANSACTION
             -- VERIFICAR QUE EL EMPLEADO A DAR DE BAJA EXISTA Y NO ESTE ACTIVO
             DECLARE @auxEmpleado INT
-            DECLARE @auxActivo INT
+            DECLARE @auxActivo BIT
             SET @auxEmpleado = NULL
 
             SELECT
@@ -584,8 +584,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO ENCARGADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleadoEncargado INT
-            DECLARE @auxRolEmpleadoEncargado INT
-            DECLARE @auxActivoEncargado INT
+            DECLARE @auxRolEmpleadoEncargado TINYINT
+            DECLARE @auxActivoEncargado BIT
             SET @auxIdEmpleadoEncargado = NULL;
 
             SELECT
@@ -669,8 +669,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO ENCARGADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleadoEncargado INT
-            DECLARE @auxRolEmpleadoEncargado INT
-            DECLARE @auxActivoEncargado INT
+            DECLARE @auxRolEmpleadoEncargado TINYINT
+            DECLARE @auxActivoEncargado BIT
             SET @auxIdEmpleadoEncargado = NULL;
 
             SELECT
@@ -732,8 +732,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO ENCARGADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleadoEncargado INT
-            DECLARE @auxRolEmpleadoEncargado INT
-            DECLARE @auxActivoEncargado INT
+            DECLARE @auxRolEmpleadoEncargado TINYINT
+            DECLARE @auxActivoEncargado BIT
             SET @auxIdEmpleadoEncargado = NULL;
 
             SELECT
@@ -779,7 +779,7 @@ BEGIN
         BEGIN TRANSACTION
             -- VERIFICAR QUE EL PROVEEDOR EXISTA Y NO ESTE INACTIVO
             DECLARE @auxIdProveedor INT
-            DECLARE @auxActivoProveedor INT
+            DECLARE @auxActivoProveedor BIT
             SET @auxIdProveedor = NULL
 
             SELECT
@@ -798,8 +798,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO ENCARGADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleadoEncargado INT
-            DECLARE @auxRolEmpleadoEncargado INT
-            DECLARE @auxActivoEncargado INT
+            DECLARE @auxRolEmpleadoEncargado TINYINT
+            DECLARE @auxActivoEncargado BIT
             SET @auxIdEmpleadoEncargado = NULL;
 
             SELECT
@@ -845,7 +845,7 @@ BEGIN
         BEGIN TRANSACTION
             -- VERIFICAR QUE EL PROVEEDOR EXISTA Y NO ESTE ACTIVO
             DECLARE @auxIdProveedor INT
-            DECLARE @auxActivoProveedor INT
+            DECLARE @auxActivoProveedor BIT
             SET @auxIdProveedor = NULL
 
             SELECT
@@ -864,8 +864,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO ENCARGADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleadoEncargado INT
-            DECLARE @auxRolEmpleadoEncargado INT
-            DECLARE @auxActivoEncargado INT
+            DECLARE @auxRolEmpleadoEncargado TINYINT
+            DECLARE @auxActivoEncargado BIT
             SET @auxIdEmpleadoEncargado = NULL;
 
             SELECT
@@ -911,7 +911,7 @@ GO
 CREATE PROCEDURE sp_Agregar_MovimientoStock
     @IdProducto INT,
     @IdEmpleado INT,
-    @IdTipoMovimiento INT,
+    @IdTipoMovimiento TINYINT,
     @Descripcion NVARCHAR(255),
     @Cantidad INT
 AS
@@ -945,7 +945,7 @@ BEGIN
             END
 
             -- VERIFICAR QUE EL TIPO DE MOVIMIENTO EXISTA
-            DECLARE @auxIdTipoMovimiento INT
+            DECLARE @auxIdTipoMovimiento TINYINT
             SET @auxIdTipoMovimiento = NULL;
 
             SELECT
@@ -1053,8 +1053,8 @@ BEGIN
 
             -- VERIFICAR QUE EL EMPLEADO ENCARGADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleadoEncargado INT
-            DECLARE @auxRolEmpleadoEncargado INT
-            DECLARE @auxActivoEncargado INT
+            DECLARE @auxRolEmpleadoEncargado TINYINT
+            DECLARE @auxActivoEncargado BIT
             SET @auxIdEmpleadoEncargado = NULL;
 
             SELECT
@@ -1099,8 +1099,8 @@ BEGIN
         BEGIN TRANSACTION
             -- VERIFICAR QUE EL EMPLEADO ENCARGADO EXISTA, SEA ADMINISTRADOR (ID = 2) Y ESTE ACTIVO
             DECLARE @auxIdEmpleadoEncargado INT
-            DECLARE @auxRolEmpleadoEncargado INT
-            DECLARE @auxActivoEncargado INT
+            DECLARE @auxRolEmpleadoEncargado TINYINT
+            DECLARE @auxActivoEncargado BIT
             SET @auxIdEmpleadoEncargado = NULL;
 
             SELECT
